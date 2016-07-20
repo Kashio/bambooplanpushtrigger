@@ -15,11 +15,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>4.5.2</version>
-            </dependency>
-            <dependency>
                 <groupId>com.atlassian.stash</groupId>
                 <artifactId>stash-parent</artifactId>
                 <version>${stash.version}</version>
@@ -29,6 +24,11 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
         <dependency>
             <groupId>com.atlassian.sal</groupId>
             <artifactId>sal-api</artifactId>

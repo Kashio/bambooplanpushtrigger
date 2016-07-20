@@ -31,7 +31,7 @@ public class BambooPlanPushTriggerRepositoryHook implements AsyncPostReceiveRepo
         final String bambooApiUrl = context.getSettings().getString("url");
         if (bambooApiUrl != null)
         {
-            final AuthorizationStore authorizationStore =new AuthorizationStore(context.getSettings().getString("user"),
+            final AuthorizationStore authorizationStore = new AuthorizationStore(context.getSettings().getString("user"),
                     context.getSettings().getString("password"));
             final RepositoryCloneUrlBuilderFactory repositoryCloneUrlBuilderFactory =
                     new RepositoryCloneUrlBuilderFactory(context.getRepository(), applicationProperties);
