@@ -9,7 +9,32 @@
         {param id: 'url' /}
         {param value: $config ? $config['url'] : null /}
         {param labelContent: 'url'  /}
-        {param descriptionText: 'Some description for url' /}
+        {param isRequired: true /}
+        {param descriptionText: 'Bamboo API url' /}
         {param errorTexts: $errors ? $errors['url'] : null /}
+    {/call}
+    {call aui.form.textField}
+        {param id: 'user' /}
+        {param value: $config ? $config['user'] : null /}
+        {param labelContent: 'user'  /}
+        {param isRequired: true /}
+        {param descriptionText: 'User for Bamboo API' /}
+        {param errorTexts: $errors ? $errors['user'] : null /}
+    {/call}
+    {call aui.form.passwordField}
+        {param id: 'password' /}
+        {param value: $config ? $config['password'] : null /}
+        {param labelContent: 'password'  /}
+        {param isRequired: true /}
+        {param descriptionText: 'User password' /}
+        {param errorTexts: $errors ? $errors['password'] : null /}
+    {/call}
+    {call aui.form.textField}
+        {param id: 'planKey' /}
+        {param value: $config ? $config['planKey'] : null /}
+        {param labelContent: 'plan key'  /}
+        {param isRequired: true /}
+        {param descriptionText: 'Play key to run' /}
+        {param errorTexts: $errors ? $errors['planKey'] : null /}
     {/call}
 {/template}
