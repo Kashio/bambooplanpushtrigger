@@ -1,6 +1,8 @@
 package kashio;
 
 import com.atlassian.stash.repository.RefChange;
+import com.atlassian.stash.ssh.api.SshCloneUrlResolver;
+import com.atlassian.stash.ssh.api.SshConfiguration;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -15,20 +17,19 @@ public class BambooBuildQueueService extends AtlassianRestConnector {
     private final String QUEUE_RESOURCE = "/queue/";
 
     private final BranchPlanKeyProvider branchPlanKeyProvider;
-    private final RepositoryCloneUrlProvider repositoryCloneUrlProvider;
     private final RefChange refChange;
     private final String bambooApiUrl;
+    private final String repositorySshCloneUrl;
 
     public BambooBuildQueueService(AuthorizationStore authorizationStore,
                                    BranchPlanKeyProvider branchPlanKeyProvider,
-                                   RepositoryCloneUrlProvider repositoryCloneUrlProvider,
                                    RefChange refChange,
-                                   String bambooApiUrl) {
+                                   String bambooApiUrl,String repositorySshCloneUrl) {
         super(authorizationStore);
         this.branchPlanKeyProvider = branchPlanKeyProvider;
-        this.repositoryCloneUrlProvider = repositoryCloneUrlProvider;
         this.refChange = refChange;
         this.bambooApiUrl = bambooApiUrl;
+        this.repositorySshCloneUrl = repositorySshCloneUrl;
     }
 
     public AuthorizationStore getAuthorizationStore() {
@@ -54,7 +55,7 @@ public class BambooBuildQueueService extends AtlassianRestConnector {
     public int build() throws IOException {
         final String finalUrl = bambooApiUrl + QUEUE_RESOURCE + branchPlanKeyProvider.getBranchPlayKey()
                 + "?ExecuteAllStages"
-                + "&bamboo.variable.repositoryUrl=" + getRepositoryCloneUrlBuilder().getCloneUrl("ssh")
+                + "&bamboo.variable.repositoryUrl=" + repositorySshCloneUrl
                 + "&bamboo.variable.branchName=" + refChange.getRefId();
         HttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(finalUrl);

@@ -6,8 +6,8 @@
     <artifactId>bambooplanpushtrigger</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <organization>
-        <name>Example Company</name>
-        <url>http://www.example.com/</url>
+        <name>kashio</name>
+        <url>https://github.com/Kashio/bambooplanpushtrigger</url>
     </organization>
     <name>bambooplanpushtrigger</name>
     <description>This is the kashio:bambooplanpushtrigger plugin for Atlassian Stash.</description>
@@ -42,6 +42,11 @@
         <dependency>
             <groupId>com.atlassian.stash</groupId>
             <artifactId>stash-spi</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.stash</groupId>
+            <artifactId>stash-ssh</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -130,9 +135,17 @@
                     <instructions>
                         <Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key>
                         <!-- Add package to export here -->
-                        <Export-Package>kashio.api,</Export-Package>
+                        <Export-Package>
+                            kashio.api,
+                        </Export-Package>
                         <!-- Add package import here -->
-                        <Import-Package>org.springframework.osgi.*;resolution:="optional", org.eclipse.gemini.blueprint.*;resolution:="optional", *</Import-Package>
+                        <Import-Package>
+                            org.apache.log.*;resolution:="optional",
+                            org.apache.avalon.framework.logger.*;resolution:="optional",
+                            org.springframework.osgi.*;resolution:="optional",
+                            org.eclipse.gemini.blueprint.*;resolution:="optional",
+                            *
+                        </Import-Package>
                         <!-- Ensure plugin is spring powered -->
                         <Spring-Context>*</Spring-Context>
                     </instructions>
