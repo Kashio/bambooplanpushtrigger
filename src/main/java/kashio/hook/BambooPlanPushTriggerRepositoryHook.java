@@ -23,14 +23,11 @@ import java.util.Collection;
 @Scanned
 public class BambooPlanPushTriggerRepositoryHook implements AsyncPostReceiveRepositoryHook, RepositorySettingsValidator
 {
-    private final ApplicationProperties applicationProperties;
     private final SshCloneUrlResolver sshCloneUrlResolver;
 
     @Autowired
-    public BambooPlanPushTriggerRepositoryHook(@ComponentImport final ApplicationProperties applicationProperties,
-                                               @ComponentImport final SshCloneUrlResolver sshCloneUrlResolver)
+    public BambooPlanPushTriggerRepositoryHook(@ComponentImport final SshCloneUrlResolver sshCloneUrlResolver)
     {
-        this.applicationProperties = applicationProperties;
         this.sshCloneUrlResolver = sshCloneUrlResolver;
     }
 
@@ -53,7 +50,7 @@ public class BambooPlanPushTriggerRepositoryHook implements AsyncPostReceiveRepo
                     final BranchPlanKeyProvider branchPlanKeyProvider = new BranchPlanKeyProvider(authorizationStore,
                             bambooApiUrl, refChange.getRefId(), planKey);
                     final BambooBuildQueueService bambooBuildQueueService = new BambooBuildQueueService(authorizationStore,
-                            branchPlanKeyProvider, repositoryCloneUrlProvider, refChange, bambooApiUrl, repositorySshCloneUrl);
+                            branchPlanKeyProvider, refChange, bambooApiUrl, repositorySshCloneUrl);
                     try {
                         bambooBuildQueueService.build();
                     } catch (IOException e) {
