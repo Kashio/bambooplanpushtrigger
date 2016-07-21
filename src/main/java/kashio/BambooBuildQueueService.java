@@ -15,18 +15,18 @@ public class BambooBuildQueueService extends AtlassianRestConnector {
     private final String QUEUE_RESOURCE = "/queue/";
 
     private final BranchPlanKeyProvider branchPlanKeyProvider;
-    private final RepositoryCloneUrlBuilder repositoryCloneUrlBuilder;
+    private final RepositoryCloneUrlProvider repositoryCloneUrlProvider;
     private final RefChange refChange;
     private final String bambooApiUrl;
 
     public BambooBuildQueueService(AuthorizationStore authorizationStore,
                                    BranchPlanKeyProvider branchPlanKeyProvider,
-                                   RepositoryCloneUrlBuilder repositoryCloneUrlBuilder,
+                                   RepositoryCloneUrlProvider repositoryCloneUrlProvider,
                                    RefChange refChange,
                                    String bambooApiUrl) {
         super(authorizationStore);
         this.branchPlanKeyProvider = branchPlanKeyProvider;
-        this.repositoryCloneUrlBuilder = repositoryCloneUrlBuilder;
+        this.repositoryCloneUrlProvider = repositoryCloneUrlProvider;
         this.refChange = refChange;
         this.bambooApiUrl = bambooApiUrl;
     }
@@ -39,8 +39,8 @@ public class BambooBuildQueueService extends AtlassianRestConnector {
         return branchPlanKeyProvider;
     }
 
-    public RepositoryCloneUrlBuilder getRepositoryCloneUrlBuilder() {
-        return repositoryCloneUrlBuilder;
+    public RepositoryCloneUrlProvider getRepositoryCloneUrlBuilder() {
+        return repositoryCloneUrlProvider;
     }
 
     public RefChange getRefChange() {
@@ -54,7 +54,7 @@ public class BambooBuildQueueService extends AtlassianRestConnector {
     public int build() throws IOException {
         final String finalUrl = bambooApiUrl + QUEUE_RESOURCE + branchPlanKeyProvider.getBranchPlayKey()
                 + "?ExecuteAllStages"
-                + "&bamboo.variable.repositoryUrl=" + repositoryCloneUrlBuilder.buildSsh()
+                + "&bamboo.variable.repositoryUrl=" + getRepositoryCloneUrlBuilder().getCloneUrl("ssh")
                 + "&bamboo.variable.branchName=" + refChange.getRefId();
         HttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(finalUrl);

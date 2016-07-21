@@ -31,20 +31,19 @@ public class BambooPlanPushTriggerRepositoryHook implements AsyncPostReceiveRepo
         final String bambooApiUrl = context.getSettings().getString("url");
         if (bambooApiUrl != null)
         {
+            final String planKey = context.getSettings().getString("planKey");
             final AuthorizationStore authorizationStore = new AuthorizationStore(context.getSettings().getString("user"),
                     context.getSettings().getString("password"));
-            final RepositoryCloneUrlBuilderFactory repositoryCloneUrlBuilderFactory =
-                    new RepositoryCloneUrlBuilderFactory(context.getRepository(), applicationProperties);
-            final RepositoryCloneUrlBuilder repositoryCloneUrlBuilder =
-                    repositoryCloneUrlBuilderFactory.build(context.getRepository().getScmId());
+            final RepositoryCloneUrlProvider repositoryCloneUrlProvider = new RepositoryCloneUrlProvider(authorizationStore,
+                    context.getRepository(), applicationProperties);
             for (RefChange refChange : refChanges)
             {
                 if (refChange.getType() == RefChangeType.ADD || refChange.getType() == RefChangeType.UPDATE)
                 {
                     final BranchPlanKeyProvider branchPlanKeyProvider = new BranchPlanKeyProvider(authorizationStore,
-                            bambooApiUrl, refChange.getRefId(), context.getSettings().getString("planKey"));
+                            bambooApiUrl, refChange.getRefId(), planKey);
                     final BambooBuildQueueService bambooBuildQueueService = new BambooBuildQueueService(authorizationStore,
-                            branchPlanKeyProvider, repositoryCloneUrlBuilder, refChange, bambooApiUrl);
+                            branchPlanKeyProvider, repositoryCloneUrlProvider, refChange, bambooApiUrl);
                     try {
                         bambooBuildQueueService.build();
                     } catch (IOException e) {
